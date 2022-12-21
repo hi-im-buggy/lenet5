@@ -1,6 +1,6 @@
 # LeNet5
 This is an implementation of LeCun et al.'s classic CNN architecture, trained
-on the MNIST dataset for handwritten digit generation.
+on the MNIST dataset for handwritten digit recognition.
 
 ## Architecture overview
 ```
