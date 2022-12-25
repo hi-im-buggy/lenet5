@@ -54,12 +54,12 @@ class LeNet5(nn.Module):
         x = self.relu(self.conv3(x))
 
         # x.shape: (N, 120, 1, 1)
-        x.squeeze(-1).squeeze(-1)
+        x = torch.squeeze(x)
 
         # x.shape: (N, 120)
         x = self.relu(self.fc1(x))
         # x.shape: (N, 84)
-        x = self.relu(self.fc1(x))
+        x = self.relu(self.fc2(x))
 
         # x.shape: (N, 10)
         prob = self.softmax(x)
