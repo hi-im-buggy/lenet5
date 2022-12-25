@@ -7,17 +7,17 @@ from tqdm import tqdm
 
 from config import *
 
-def train(model, test_loader, val_loader, optimizer):
+def train(model, train_loader, val_loader, optimizer):
     """
     Train the given model with data from the given dataloader.
     """
     for i in tqdm(range(NUM_EPOCHS), desc="Epoch"):
         model.train(True)
-        train_epoch(model, loader, optimizer, i)
+        train_epoch(model, train_loader, optimizer, i)
 
         # Calculate and report validation loss
         model.train(False)
-        validate_epoch(model, loader, i)
+        validate_epoch(model, val_loader, i)
 
 def train_epoch(model, loader, optimizer, epoch_idx):
     """
