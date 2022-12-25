@@ -16,14 +16,14 @@ class LeNet5(nn.Module):
         self.loss = nn.CrossEntropyLoss()
 
         # Convolution layers
-        # Padding of 2 on the first convolutional layer allows for 28x28 input from  MNIST
-        # to be treated like 32x32 input.
+        # Padding of 2 on the first convolutional layer allows for 28x28 input
+        # from  MNIST to be treated like 32x32 input.
         self.conv1 = nn.Conv2d(1, 6, 5, padding=2)
         self.conv2 = nn.Conv2d(6, 16, 5)
         self.conv3 = nn.Conv2d(16, 120, 5)
 
         # Pooling layer
-        self.pool = nn.AvgPool2d(5, stride=2)
+        self.pool = nn.AvgPool2d(2, stride=2)
 
         # Fully connected layers
         self.fc1 = nn.Linear(120, 84)
@@ -40,9 +40,6 @@ class LeNet5(nn.Module):
         Takes a batch of 28x28 images.
         Returns the probability distribution for recognizing the digit.
         """
-        # x.shape: (N, 28, 28) or (N, 1, 28, 28), assuming former
-        x.unsqueeze(1)
-
         # x.shape: (N, 1, 28, 28)
         x = self.relu(self.conv1(x))
         # x.shape: (N, 6, 28, 28)
