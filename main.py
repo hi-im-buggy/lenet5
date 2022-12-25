@@ -3,6 +3,7 @@ Main driver code for model training and inference.
 """
 import torch
 import wandb
+from torch import optim
 from torchvision import transforms
 from torchvision.datasets import MNIST
 from torch.utils.data import DataLoader
@@ -18,7 +19,8 @@ train_set = MNIST('./data', train=True, download=True, transform=t)
 train_loader = DataLoader(train_set, batch_size=BATCH_SIZE)
 
 model = LeNet5()
+optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
-train_epoch(model, train_loader)
+train(model, train_loader, optimizer)
 
 wandb.watch(model)

@@ -1,7 +1,7 @@
 """
 Definition of the model architecture.
 """
-from torch import nn, optim
+from torch import nn
 
 from config import *
 
@@ -12,8 +12,7 @@ class LeNet5(nn.Module):
     def __init__(self):
         super(LeNet5, self).__init__()
 
-        # Model training params
-        self.optim = optim.Adam(self.parameters(), lr=LEARNING_RATE)
+        # Loss function
         self.loss = nn.CrossEntropyLoss()
 
         # Convolution layers
