@@ -1,7 +1,9 @@
 """
 Definition of the model architecture.
 """
-from torch import nn
+from torch import nn, optim
+
+from config import *
 
 class LeNet5(nn.Module):
     """
@@ -9,6 +11,10 @@ class LeNet5(nn.Module):
     """
     def __init__(self):
         super(LeNet5, self).__init__()
+
+        # Model training params
+        self.optim = optim.Adam(self.parameters(), lr=LEARNING_RATE)
+        self.loss = nn.CrossEntropyLoss()
 
         # Convolution layers
         # Padding of 2 on the first convolutional layer allows for 28x28 input from  MNIST
@@ -28,7 +34,7 @@ class LeNet5(nn.Module):
         self.relu = nn.ReLU()
 
         # Softmax
-        self.softmax = nn.Softmax()
+        self.softmax = nn.Softmax(dim=-1)
 
     def forward(self, x):
         """
