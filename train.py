@@ -7,12 +7,17 @@ from tqdm import tqdm
 
 from config import *
 
-def train(model, loader, optimizer):
+def train(model, test_loader, val_loader, optimizer):
     """
     Train the given model with data from the given dataloader.
     """
-    for i in tqdm(range(NUM_EPOCHS)):
+    for i in tqdm(range(NUM_EPOCHS), desc="Epoch"):
+        model.train(True)
         train_epoch(model, loader, optimizer, i)
+
+        # Calculate and report validation loss
+        model.train(False)
+        validate_epoch(model, loader, i)
 
 def train_epoch(model, loader, optimizer, epoch_idx):
     """
@@ -20,7 +25,7 @@ def train_epoch(model, loader, optimizer, epoch_idx):
     """
     running_loss = 0
     last_loss = 0
-    for i, batch in tqdm(enumerate(loader)):
+    for i, batch in tqdm(enumerate(loader), desc="Batch"):
         inp, label = batch
         # inp: (batch_size, 1, 28, 28)
         # The single channel 28x28 image of the digit
@@ -47,6 +52,42 @@ def train_epoch(model, loader, optimizer, epoch_idx):
             wandb.log({
                 'epoch': epoch_idx + 1,
                 'batch': i + 1,
-                'loss': last_loss,
+                'train loss': last_loss,
                 })
 
+def validate_epoch(model, loader, epoch_idx):
+    """
+    Test the model against the validation set.
+    """
+    running_loss = 0
+    for i, batch in tqdm(enumerate(loader), desc="Batch"):
+        inp, label = batch
+        # Run inference on the current minibatch
+        pred = model(inp)
+        loss = model.loss(pred, label)
+
+        # Add to the running loss calculation
+        running_loss += loss
+
+    avg_loss = running_loss / (i + 1)
+    wandb.log({
+        'epoch': epoch_idx + 1,
+        'val loss': avg_loss
+        })
+
+def test(model, loader):
+    running_loss = 0
+
+    for i, batch in tqdm(enumerate(loader), desc="Batch"):
+        inp, label = batch
+        # Run inference on the current minibatch
+        pred = model(inp)
+        loss = model.loss(pred, label)
+
+        # Add to the running loss calculation
+        running_loss += loss
+
+    avg_loss = running_loss / (i + 1)
+    wandb.log({
+        'test loss': avg_loss
+        })
