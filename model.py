@@ -40,27 +40,31 @@ class LeNet5(nn.Module):
         Takes a batch of 28x28 images.
         Returns the probability distribution for recognizing the digit.
         """
+        # First conv, relu and pool
         # x.shape: (N, 1, 28, 28)
         x = self.relu(self.conv1(x))
         # x.shape: (N, 6, 28, 28)
         x = self.pool(x)
 
+        # Second conv, relu and pool
         # x.shape: (N, 6, 14, 14)
         x = self.relu(self.conv2(x))
         # x.shape: (N, 16, 10, 10)
         x = self.pool(x)
 
+        # Final pool into the 120 channels and squeeze
         # x.shape: (N, 16, 5, 5)
         x = self.relu(self.conv3(x))
-
         # x.shape: (N, 120, 1, 1)
         x = torch.squeeze(x)
 
+        # Fully connected layers with relu
         # x.shape: (N, 120)
         x = self.relu(self.fc1(x))
         # x.shape: (N, 84)
         x = self.relu(self.fc2(x))
 
+        # Final probability distribution
         # x.shape: (N, 10)
         prob = self.softmax(x)
         return prob
