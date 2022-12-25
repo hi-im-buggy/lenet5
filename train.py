@@ -11,14 +11,16 @@ def train(model, loader, optimizer):
     """
     Train the given model with data from the given dataloader.
     """
-    for _ in tqdm(range(NUM_EPOCHS)):
-        train_epoch(model, loader, optimizer)
+    for i in tqdm(range(NUM_EPOCHS)):
+        train_epoch(model, loader, optimizer, i)
 
-def train_epoch(model, loader, optimizer):
+def train_epoch(model, loader, optimizer, epoch_idx):
     """
     Train the model for a single epoch.
     """
-    for batch in tqdm(loader):
+    running_loss = 0
+    last_loss = 0
+    for i, batch in tqdm(enumerate(loader)):
         inp, label = batch
         # inp: (batch_size, 1, 28, 28)
         # The single channel 28x28 image of the digit
@@ -39,4 +41,12 @@ def train_epoch(model, loader, optimizer):
         optimizer.step()
 
         # Gather data and report
-        wandb.log({'loss': loss})
+        running_loss += loss.item()
+        if i % 100 == 99:
+            last_loss = running_loss/100
+            wandb.log({
+                'epoch': epoch_idx + 1,
+                'batch': i + 1,
+                'loss': last_loss,
+                })
+
