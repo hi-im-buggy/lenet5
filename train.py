@@ -69,7 +69,7 @@ def validate_epoch(model, loader, epoch_idx):
         # Add to the running loss calculation
         running_loss += loss
 
-    avg_loss = running_loss / (i + 1)
+    avg_loss = running_loss / len(loader)
     wandb.log({
         'epoch': epoch_idx + 1,
         'val loss': avg_loss
@@ -87,7 +87,7 @@ def test(model, loader):
         # Add to the running loss calculation
         running_loss += loss
 
-    avg_loss = running_loss / (i + 1)
+    avg_loss = running_loss / len(loader)
     wandb.log({
         'test loss': avg_loss
         })
